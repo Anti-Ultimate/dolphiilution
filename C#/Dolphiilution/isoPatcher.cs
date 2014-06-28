@@ -14,6 +14,7 @@ namespace Dolphiilution
     class isoPatcher
     {
         private static BackgroundWorker worker = new BackgroundWorker();
+
         public void patchIso(ListView lvw, string outputpath, string inputxml, string inputfolder)
         {    
             foreach (ListViewItem item in lvw.Items)
@@ -26,6 +27,7 @@ namespace Dolphiilution
 
                 XmlNodeList sections = xmlDoc.SelectNodes("//wiidisc/options/section");
                 string patchid = "";
+
                 foreach (XmlNode section in sections)
                 {
                     parseXML xmlParser = new parseXML();

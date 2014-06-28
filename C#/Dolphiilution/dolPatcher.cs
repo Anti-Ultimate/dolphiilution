@@ -19,37 +19,52 @@ namespace Dolphiilution
 
             string[] file = File.ReadAllLines(@settingslocation + "/Config/Dolphin.ini");
 
-            foreach (string line in file)
+            //foreach (string line in file)
+            //{
+
+            //    if (line.Contains("DVDRoot = "))
+            //    {
+
+            //        temp = line.Replace(line, "DVDRoot = " + dvdroot);
+
+            //        newFile.Append(temp + "\r\n");
+
+            //        continue;
+
+            //    }
+
+            //    if (line.Contains("Apploader = "))
+            //    {
+
+            //        temp = line.Replace(line, "Apploader = " + apploader);
+
+            //        newFile.Append(temp + "\r\n");
+
+            //        continue;
+
+            //    }
+
+            //    newFile.Append(line + "\r\n");
+            //}
+
+            for (int i = 0; i <= file.Length; i++)
             {
-
-                if (line.Contains("DVDRoot = "))
+                if (file[i].Contains("DVDRoot = "))
                 {
-
-                    temp = line.Replace(line, "DVDRoot = " + dvdroot);
-
+                    temp = file[i].Replace(file[i], "DVDRoot = " + dvdroot);
                     newFile.Append(temp + "\r\n");
-
                     continue;
-
                 }
 
-                if (line.Contains("Apploader = "))
+                if (file[i].Contains("Apploader = "))
                 {
-
-                    temp = line.Replace(line, "Apploader = " + apploader);
-
+                    temp = file[i].Replace(file[i], "Apploader = " + apploader);
                     newFile.Append(temp + "\r\n");
-
                     continue;
-
                 }
-
-                newFile.Append(line + "\r\n");
-
             }
 
             File.WriteAllText(@settingslocation + "/Config/Dolphin.ini", newFile.ToString());
-
 
             checkSaveFiles(toHex(isoPath), settingslocation);
 
@@ -59,12 +74,12 @@ namespace Dolphiilution
             dolphinproc.StartInfo.Arguments = "/e \"" + dollocation + "\"";
             dolphinproc.Start();
         }
+
         public void checkSaveFiles(string hexid, string settingslocation)
         {
             string lastplayed = Application.StartupPath + "/dolphii/lastplayed";
             string dolphiisavepath = Application.StartupPath + "/dolphii/saves/";
       
-
             if (!(File.Exists(lastplayed))){
                 File.Create(lastplayed).Dispose();
                 File.WriteAllText(lastplayed, hexid);
@@ -76,11 +91,20 @@ namespace Dolphiilution
                     writeSaveFiles(hexid);
 
                     string[] normalgamesD = Directory.GetDirectories(dolphiisavepath);
-                    foreach (string game in normalgamesD)
+
+                    //foreach (string game in normalgamesD)
+                    //{
+                    //    if (game.Contains(hexid))
+                    //    {
+                    //        restoreSaveFiles(game);
+                    //    }
+                    //}
+
+                    for (int i = 0; i <= normalgamesD.Length; i++)
                     {
-                        if (game.Contains(hexid))
+                        if (normalgamesD[i].Contains(hexid))
                         {
-                            restoreSaveFiles(game);
+                            restoreSaveFiles(normalgamesD[i]);
                         }
                     }
                 }
@@ -96,30 +120,31 @@ namespace Dolphiilution
             CopyDir(System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Dolphin Emulator/Wii/title/ffffffff/ffffffff", dolphiisavepath + "/" + hexid);
             File.WriteAllText(lastplayed, hexid);
        }
-        public void restoreSaveFiles(string originalpath)
-        {
-            CopyDir(originalpath, System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Dolphin Emulator/Wii/title/ffffffff/ffffffff");
-        }
 
-        public string toHex(string isoPath)
-        {
-            string output = string.Empty;
-            string error = string.Empty;
+       public void restoreSaveFiles(string originalpath)
+       {
+           CopyDir(originalpath, System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Dolphin Emulator/Wii/title/ffffffff/ffffffff");
+       }
 
-            Process wit = new Process();
-            wit.StartInfo.FileName = Application.StartupPath + "/WIT/wit.exe";
-            wit.StartInfo.Arguments = "id " + "\"" + isoPath + "\"";
-            wit.StartInfo.RedirectStandardError = true;
-            wit.StartInfo.RedirectStandardOutput = true;
-            wit.StartInfo.UseShellExecute = false;
-            wit.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            wit.StartInfo.CreateNoWindow = true;
-            wit.Start();
+       public string toHex(string isoPath)
+       {
+           string output = string.Empty;
+           string error = string.Empty;
 
-            using (StreamReader streamReader = wit.StandardOutput)
-            {
-                output = streamReader.ReadToEnd();
-            }
+           Process wit = new Process();
+           wit.StartInfo.FileName = Application.StartupPath + "/WIT/wit.exe";
+           wit.StartInfo.Arguments = "id " + "\"" + isoPath + "\"";
+           wit.StartInfo.RedirectStandardError = true;
+           wit.StartInfo.RedirectStandardOutput = true;
+           wit.StartInfo.UseShellExecute = false;
+           wit.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+           wit.StartInfo.CreateNoWindow = true;
+           wit.Start();
+
+           using (StreamReader streamReader = wit.StandardOutput)
+           {
+               output = streamReader.ReadToEnd();
+           }
 
             string symbols = " !\"#$%&'()*+,-./0123456789:;<=>?@";
             string loAZ = "abcdefghijklmnopqrstuvwxyz";
@@ -131,12 +156,19 @@ namespace Dolphiilution
             string valueStr = output.Substring(0, 4);
             string hexChars = "0123456789abcdef";
             string text = "";
+
+            char oneChar;
+            int asciiValue;
+            int index1;
+            int index2;
+
             for (int i = 0; i < valueStr.Length; i++)
             {
-                char oneChar = valueStr[i];
-                int asciiValue = symbols.IndexOf(oneChar) + 32;
-                int index1 = asciiValue % 16;
-                int index2 = (asciiValue - index1) / 16;
+                oneChar = valueStr[i];
+                asciiValue = symbols.IndexOf(oneChar) + 32;
+                index1 = asciiValue % 16;
+                index2 = (asciiValue - index1) / 16;
+
                 if (text != "") text += ":";
                 text += hexChars[index2];
                 text += hexChars[index1];
@@ -145,27 +177,50 @@ namespace Dolphiilution
             text = text.Replace(":", "");
             return text;
         }
+
         public void finish()
         {
             brew.pbxWindots.Image = null;
         }
+
         public static void CopyDir(string source, string target)
         {
             Console.WriteLine("\nCopying Directory:\n  \"{0}\"\n-> \"{1}\"", source, target);
 
-            if (!Directory.Exists(target)) Directory.CreateDirectory(target);
-            string[] sysEntries = Directory.GetFileSystemEntries(source);
-
-            foreach (string sysEntry in sysEntries)
+            if (!Directory.Exists(target))
             {
-                string fileName = Path.GetFileName(sysEntry);
-                string targetPath = Path.Combine(target, fileName);
-                if (Directory.Exists(sysEntry))
-                    CopyDir(sysEntry, targetPath);
+                Directory.CreateDirectory(target);
+            }
+
+            string[] sysEntries = Directory.GetFileSystemEntries(source);
+            string fileName;
+            string targetPath;
+
+            //foreach (string sysEntry in sysEntries)
+            //{
+            //    string fileName = Path.GetFileName(sysEntry);
+            //    string targetPath = Path.Combine(target, fileName);
+            //    if (Directory.Exists(sysEntry))
+            //        CopyDir(sysEntry, targetPath);
+            //    else
+            //    {
+            //Console.WriteLine("\tCopying \"{0}\"", fileName);
+            //File.Copy(sysEntry, targetPath, true);
+            //    }
+            //}
+
+            for (int i = 0; i <= sysEntries.Length; i++)
+            {
+                fileName = Path.GetFileName(sysEntries[i]);
+                targetPath = Path.Combine(target, fileName);
+                if (Directory.Exists(sysEntries[i]))
+                {
+                    CopyDir(sysEntries[i], targetPath);
+                }
                 else
                 {
                     Console.WriteLine("\tCopying \"{0}\"", fileName);
-                    File.Copy(sysEntry, targetPath, true);
+                    File.Copy(sysEntries[i], targetPath, true);
                 }
             }
         }

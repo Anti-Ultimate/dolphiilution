@@ -31,3 +31,6 @@ Y:\GitHub\dolphiilution\C#\Dolphiilution\obj\Debug\Dolphiilution.newMain.resourc
 Y:\GitHub\dolphiilution\C#\Dolphiilution\obj\Debug\Dolphiilution.Properties.Resources.resources
 Y:\GitHub\dolphiilution\C#\Dolphiilution\obj\Debug\Dolphiilution.csproj.GenerateResource.Cache
 Y:\GitHub\dolphiilution\C#\Dolphiilution\bin\Debug\Dolphiilution.exe.config
+C:\Users\Florian\Desktop\dolpiilution\dolphiilution\C#\Dolphiilution\bin\Debug\Dolphiilution.exe.config
+C:\Users\Florian\Desktop\dolpiilution\dolphiilution\C#\Dolphiilution\obj\Debug\Dolphiilution.exe
+C:\Users\Florian\Desktop\dolpiilution\dolphiilution\C#\Dolphiilution\obj\Debug\Dolphiilution.pdb
